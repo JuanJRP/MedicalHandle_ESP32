@@ -1,7 +1,30 @@
-# Documentación del Proyecto MedicalHandle
+# MedicalHandle
 
-## Descripción General
-MedicalHandle es un sistema de monitoreo médico basado en ESP32 que permite la medición y registro de signos vitales importantes, incluyendo ritmo cardíaco, saturación de oxígeno (SpO2), temperatura corporal, y condiciones ambientales (temperatura y humedad).
+[![CI](https://github.com/JuanJRP/MedicalHandle_ESP32/actions/workflows/ci.yml/badge.svg)](https://github.com/JuanJRP/MedicalHandle_ESP32/actions/workflows/ci.yml)
+![ESP32](https://img.shields.io/badge/ESP32-Arduino-E7352C?logo=espressif&logoColor=white)
+![C++](https://img.shields.io/badge/C%2B%2B-firmware-00599C?logo=cplusplus&logoColor=white)
+
+Prototipo de **monitoreo de signos vitales** basado en ESP32: mide frecuencia cardiaca, saturación de oxígeno
+(SpO₂), temperatura corporal y condiciones del ambiente, las muestra en una pantalla OLED y las envía en tiempo
+real a Excel para registrarlas y graficarlas.
+
+<p align="center"><img src="MainCode/Medical%20Handle%20(3).jpeg" alt="Prototipo de MedicalHandle: ESP32, sensores y pantalla OLED en protoboard" width="640"></p>
+
+## Cómo funciona
+
+```text
+MAX30100 (pulso + SpO₂) ─┐
+MLX90614 (temp. corporal, IR) ─┤ I²C
+DHT11 (temp. + humedad ambiente) ─┤ GPIO 4      ┌─► OLED SH1106 128×64 (lecturas en vivo)
+                                   └─► ESP32 ───┤
+                                                └─► Serial → PLX-DAQ → Excel (registro y gráficas)
+```
+
+1. Al encender, el ESP32 prueba cada sensor y muestra en pantalla si inicializó bien.
+2. Cuando detecta un dedo en el MAX30100, empieza a medir y reinicia el temporizador de Excel.
+3. Cada segundo actualiza la pantalla y envía una fila a Excel con hora, BPM, SpO₂ y temperaturas.
+
+El firmware se compila en cada *push* con GitHub Actions para la placa `esp32:esp32:esp32`.
 
 ## Características Principales
 - Medición de ritmo cardíaco (BPM)

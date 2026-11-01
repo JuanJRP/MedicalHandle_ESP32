@@ -1,0 +1,3 @@
+libraries/** linguist-vendored
+Documentation/** linguist-documentation
+*.xlsm binary
